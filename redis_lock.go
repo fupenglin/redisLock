@@ -2,6 +2,7 @@ package redisLock
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"math/rand"
 	"time"
 
@@ -21,11 +22,11 @@ type RLocker struct {
 	r      *rand.Rand
 }
 
-func New(rdb *redis.Client, key, value string) *RLocker {
+func New(rdb *redis.Client, key string) *RLocker {
 	return &RLocker{
 		rdb:    rdb,
 		key:    key,
-		value:  value,
+		value:  uuid.New().String(),
 		stop:   make(chan struct{}, 1),
 		expiry: defaultExpiration,
 		r:      rand.New(rand.NewSource(time.Now().UnixNano())),

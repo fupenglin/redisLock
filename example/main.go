@@ -10,7 +10,6 @@ import (
 	"github.com/fupenglin/redisLock"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
 )
 
 var ctx = context.Background()
@@ -33,8 +32,7 @@ func main() {
 }
 
 func submit(wg *sync.WaitGroup, rdb *redis.Client) {
-	uuid := uuid.NewString()
-	rlocker := redisLock.New(rdb, "stock_key", uuid)
+	rlocker := redisLock.New(rdb, "stock_key")
 	if ok, _ := rlocker.Lock(ctx); ok {
 		defer rlocker.Unlock(ctx)
 		key := "stock"
